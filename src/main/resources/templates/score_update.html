@@ -9,33 +9,104 @@
 <body>
 
 
-<div class="container card shadow">
+<div class="container " >
+
+    <div class="text-light" style="background:#196F3D ">
+        <div>
+            <h1>Live Score</h1>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light  bg-success">
+
+            <div class="container-fluid">
+
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <table class="table" >
+        <tr>
+            <td colspan="4">
+                <div>
+                    <h1>Team A Vs Team B</h1>
+                </div>
+                <div>
+                    Team Score:<span id="totalRun" th:text="${run}"></span> /<span id="wicket">0</span>(<span id="over">23</span>)
+                </div>
+
+
+
+                <div>
+                    Team A Needs <span id="needRuns">55</span> runs from <span id="fromBalls">35</span> Ball
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
 
   <div class="">
 
-     <div class="row p-3">
-         <div class=" col-md-6 col-offset-3">
-             <form>
+     <div class="row p-3 d-flex aligns-items-center justify-content-center ">
+         <div class=" col-md-6 card shadow border ">
+             <form action="/save" method="post">
                  <label>Run</label>
-                 <select class="form-select" aria-label="Default select example">
+                 <select id="runselectId" name="runs" class="form-select" aria-label="Default select example">
 
                      <th:block th:each="runs:${runsList}">
-                         <option th:value="${runs.value}" th:text="${runs.value}"></option>
+                         <option id="${runs.value}"  th:value="${runs.value}" th:text="${runs.value}"></option>
                      </th:block>
 
                  </select>
                  <br/>
 
-                 <label>Type of Run</label>
-                 <select class="form-select" aria-label="Default select example">
+                 <label >Type of Run</label>
+                 <select class="form-select" aria-label="Default select example" id="runType">
                      <th:block th:each="runType:${runTypeList}">
                          <option th:value="${runType.value}"  th:text="${runType.value}"></option>
 
                      </th:block>
                  </select>
                  <br/>
-                 <label>Select if the run is extra</label>
-                 <select class="form-select" aria-label="Default select example">
+                 <label class="runType d-none">Select if the run is extra</label>
+                 <select class="form-select runType d-none" aria-label="Default select example" id="extra" name="">
                      <th:block th:each="extraRun:${extraRunList}">
                          <option th:value="${extraRun.value}" th:text="${extraRun.value}"></option>
                      </th:block>
@@ -50,7 +121,7 @@
 
 
                  <br/>
-                 <button type="submit" class="btn btn-primary">Submit</button>
+                 <button type="submit" id="submit1" class="btn btn-primary">Submit</button>
              </form>
          </div>
      </div>
@@ -64,6 +135,187 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var count=0;
+
+
+
+        $('#saveUser').click(function () {
+
+            $.ajax({
+
+                type: "POST",
+                url: "/user/save",
+                data: {
+                    userName: $('#userName').val(),
+                    fatherName: $('#fatherName').val(),
+                    motherName: $('#motherName').val(),
+                    dateOfBirth: $('#dateOfBirth').val(),
+                    address: $('#address').val(),
+                    gender: $('input[name="gender"]:checked').val(),
+                    designation: $("#designation").val(),
+                    educationQualification: myCheckboxes
+
+
+                    // $('input[type=checkbox]:checked').map(function(_, el) {  return $(el).val();  }).get()
+
+                },
+                success: function (response) {
+                    $("#userForm")[0].reset();
+                    getAllUser();
+
+                },
+                error: function (err) {
+                    alert("Something went wrong");
+                }
+            });
+        });
+
+    });
+    var data = "";
+
+    function getAllUser() {
+        $.ajax({
+            type: "GET",
+            url: "/user/list",
+
+            success: function (response) {
+
+                data = response;
+                $('.tr').remove();
+                for (i = 0; i < data.length; i++) {
+                    $('#userTable').append(
+                        '<tr class="tr">' +
+                        '<td>' + data[i].userName + '</td>' +
+                        '<td>' + data[i].fatherName + '</td>' +
+                        '<td>' + data[i].motherName + '</td>' +
+                        '<td>' + data[i].dateOfBirth + '</td>' +
+                        '<td>' + data[i].address + '</td>' +
+                        '<td>' + data[i].gender + '</td>' +
+                        '<td>' + data[i].designation + '</td>' +
+                        '<td>' + data[i].educationQualification + '</td>' +
+                        '<td> ' +
+
+                        '<button class="btn btn-outline-warning btn-sm" onclick="editUser(' + data[i].id + ')"" >Edit</button>' +
+                        '<button class="btn btn-outline-danger btn-sm" onclick="deleteUser(' + data[i].id + ')" >Delete</button>'
+                        + '</td>'
+                        + '</tr>'
+                    )
+                }
+            }
+        });
+    }
+    //
+    // function editUser(id) {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/user/getUser/" + id,
+    //         dataType: 'json',
+    //
+    //         success: function (response) {
+    //
+    //             let myArray = [];
+    //             $('input[type="checkbox"]').prop('checked', false);
+    //
+    //             myArray = response.educationQualification.split(",");
+    //             $("#id").val(id),
+    //                 $("#userName").val(response.userName),
+    //                 $("#fatherName").val(response.fatherName),
+    //                 $("#motherName").val(response.motherName),
+    //                 $("#dateOfBirth").val(response.dateOfBirth),
+    //                 $("#address").val(response.address),
+    //                 $("#designation").val(response.designation),
+    //                 $("#" + response.gender).prop('checked', true).val(response.gender),
+    //
+    //
+    //                 // $.each(myArray, function (index, value) {
+    //                 //      $("#" + myArray[index]).prop('checked', true).val(value[index]);
+    //                 // });
+    //
+    //                 $.map(myArray, function (val, i) {
+    //                     $("#" + myArray[i]).prop('checked', true).val(val);
+    //                 });
+    //
+    //         },
+    //         error: function (err) {
+    //             alert("Error is : " + err)
+    //         }
+    //     })
+    // }
+
+
+    // function updateUserBtn() {
+    //     let myCheckboxes = new Array();
+    //     $('input[name="certificateList"]:checked').each(function () {
+    //         myCheckboxes.push($(this).val());
+    //     });
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/user/update",
+    //
+    //         data: {
+    //             id: $('#id').val(),
+    //             userName: $('#userName').val(),
+    //             fatherName: $('#fatherName').val(),
+    //             motherName: $('#motherName').val(),
+    //             dateOfBirth: $('#dateOfBirth').val(),
+    //             address: $('#address').val(),
+    //             gender: $('input[name="gender"]:checked').val(),
+    //             designation: $("#designation").val(),
+    //             educationQualification: myCheckboxes
+    //         },
+    //         success: function (result) {
+    //             $("#userForm")[0].reset();
+    //             dataType: 'json',
+    //                 getAllUser();
+    //         }
+    //     })
+    // }
+
+
+    function deleteUser(id) {
+        $.ajax({
+            url: "/user/delete/" + id,
+            success: function (response) {
+                getAllUser();
+            },
+            error: function (err) {
+                alert("error is " + err);
+            }
+        })
+    }
+
+
+    var Link="";
+
+    var  totalRun=0;
+    $("#submit1").click(function () {
+
+       var result =  $("#runselectId").val();
+      ;
+         $('#totalRun').text(result);
+
+    });
+
+    $("#runType").on("change", function () {
+        if (this.value == "Extra" || this.value == "Extra+Batted" || this.value == "Out+Extra"){
+            $(".runType").removeClass('d-none')
+        }else {
+            $(".runType").addClass('d-none')
+        }
+    })
+
+</script>
+
+
 
 </body>
 </html>

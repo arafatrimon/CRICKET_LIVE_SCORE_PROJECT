@@ -1,9 +1,15 @@
 package com.example.cricket_score.controller;
 
+import com.example.cricket_score.model.Score;
+import com.example.cricket_score.service.ScoreService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,56 +17,15 @@ import java.util.Map;
 @Controller
 public class ScoreController {
 
-    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
-    @GetMapping("/squad")
-    public String squad() {
-        return "squad";
-    }
-
-    @GetMapping("/point-table")
-    public String pointTable() {
-        return "point_table";
-    }
-
-    @GetMapping("/score")
-    public String score() {
-        return "score";
-    }
-
-    @GetMapping("/news")
-    public String news() {
-        return "news";
-    }
-
-    @GetMapping("/schedule")
-    public String schedule() {
-        return "schedule";
-    }
-
-    @GetMapping("/user")
-    public String user() {
-        return "user";
-    }
-
-    @GetMapping("/match-team-details")
-    public String matchTeamDetails() {
-        return "match_team_details";
-    }
-
-    @GetMapping("/toss-details")
-    public String tossDetails() {
-        return "toss_details";
-    }
+    @Autowired
+    private ScoreService scoreService;
 
     @GetMapping("/score-update")
-    public String updateBallByBall() {
+    public String updateBallByBall(Model model) {
+        int run = scoreService.getRun();
+        model.addAttribute("run", run);
         return "score_update";
     }
-
 
     @ModelAttribute("outTypeList")
     public Map<Integer, String> outType() {
@@ -104,6 +69,19 @@ public class ScoreController {
         return Runs;
     }
 
+    @ModelAttribute("extraRunList")
+    public Map<Integer, String> ExtraRun() {
+        Map<Integer, String> ExtraRun = new HashMap<>();
+        ExtraRun.put(0, "");
+        ExtraRun.put(1, "Wide");
+        ExtraRun.put(2, "Wide+bye");
+        ExtraRun.put(3, "No Ball");
+        ExtraRun.put(4, "No ball+bye");
+        ExtraRun.put(5, "bye/legbye");
+
+        return ExtraRun;
+    }
+
     @ModelAttribute("runTypeList")
     public Map<Integer, String> RunType() {
         Map<Integer, String> RunType = new HashMap<>();
@@ -118,17 +96,17 @@ public class ScoreController {
         return RunType;
     }
 
-    @ModelAttribute("extraRunList")
-    public Map<Integer, String> ExtraRun() {
-        Map<Integer, String> ExtraRun = new HashMap<>();
-        ExtraRun.put(0, "");
-        ExtraRun.put(1, "Wide");
-        ExtraRun.put(2, "Wide+bye");
-        ExtraRun.put(3, "No Ball");
-        ExtraRun.put(4, "No ball+bye");
-        ExtraRun.put(5, "bye/legbye");
 
-        return ExtraRun;
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute Score score, Model model, RedirectAttributes redirectAttributes){
+       int run=  scoreService.updateScore(score);
+       redirectAttributes.addFlashAttribute("run", run);
+      return "redirect:/score-update";
     }
 
+//    @ModelAttribute("emailModelAttribute")
+//    Score emailModelAttribute() {
+//        return score.ge;
+//    }
 }
