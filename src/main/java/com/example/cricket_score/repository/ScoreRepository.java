@@ -21,9 +21,12 @@ public interface ScoreRepository extends JpaRepository<Score, Long> {
     @Query(value = "select bowl from score where id = :id", nativeQuery = true)
     int findByTotalBowl(@Param("id") long id);
 
+
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query(value = "update score set total_runs = :total where id =1",nativeQuery = true)
-    void updateValue(@Param("total") int total);
+    @Query(value = "update score set total_runs = :total, bowl = :bowl where id =1",nativeQuery = true)
+    void updateValue(@Param("total") int total, @Param("bowl") int bowl);
+
+
 
 }

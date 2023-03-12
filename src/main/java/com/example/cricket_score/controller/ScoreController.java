@@ -1,6 +1,10 @@
 package com.example.cricket_score.controller;
 
+import com.example.cricket_score.model.Bowler;
+import com.example.cricket_score.model.BowlerModel;
 import com.example.cricket_score.model.Score;
+import com.example.cricket_score.repository.BowlerRepository;
+import com.example.cricket_score.service.BowlerService;
 import com.example.cricket_score.service.ScoreService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,10 +25,19 @@ public class ScoreController {
     @Autowired
     private ScoreService scoreService;
 
+//    @Autowired
+//    private BowlerService bowlerService;
+
     @GetMapping("/score-update")
     public String updateBallByBall(Model model) {
+//        List<?> bowlers=bowlerService.getAllBowler();
+
         int run = scoreService.getRun();
+        double over = scoreService.getOver();
+
         model.addAttribute("run", run);
+        model.addAttribute("over", over);
+//        model.addAttribute("bowlers", bowlers);
         return "score_update";
     }
 
@@ -100,7 +114,8 @@ public class ScoreController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute Score score, Model model, RedirectAttributes redirectAttributes){
-       int run=  scoreService.updateScore(score);
+       score.setBowl(1);
+        int run=  scoreService.updateScore(score);
        redirectAttributes.addFlashAttribute("run", run);
       return "redirect:/score-update";
     }
