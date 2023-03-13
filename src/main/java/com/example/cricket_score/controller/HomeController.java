@@ -46,10 +46,7 @@ public class HomeController {
         return "user";
     }
 
-    @GetMapping("/match-team-details")
-    public String matchTeamDetails() {
-        return "match_team_details";
-    }
+
 
     @GetMapping("/toss-details")
     public String tossDetails() {

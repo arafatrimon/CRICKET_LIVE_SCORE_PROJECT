@@ -1,110 +1,107 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
 
-
+<div th:insert="~{navbar}"></div>
 <div class="container mt-5">
 
-  <form>
 
-    <select class="form-select" aria-label="Default select example">
-      <option selected>Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
 
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 1
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 2
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>
+
+    <h1>Create Match</h1>
     <br/>
 
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 1
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 2
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-    <br/>
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-    <br/>
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>  <label class="checkbox-inline">
-        <input type="checkbox" class="form-check-input"value="">Option 3
-      </label>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
 
-  <form>
+    <form th:action="@{/match-team-details/save}" th:object="${matchTeamDetails}" method="post" enctype="multipart/form-data">
 
-    <select class="form-select" aria-label="Default select example">
-      <option selected>Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
 
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 1
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 2
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 3
-    </label>
+    <div class="row">
 
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 1
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 2
-    </label>
-    <label class="checkbox-inline">
-      <input type="checkbox" class="form-check-input"value="">Option 3
-    </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>  <label class="checkbox-inline">
-    <input type="checkbox" class="form-check-input"value="">Option 3
-  </label>
+      <div class="col-md-6">
+        <h3>Team A</h3>
+        <div class="form-group">
 
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+          <select id="team1" name="teams[]" class="form-select" onchange="setCltVal(this);"
+                  aria-label="Default select example">
+            <th:block th:each="teams:${teamList}">
+              <option th:value="${teams.id}" th:text="${teams.name}"></option>
+
+            </th:block>
+          </select>
+        </div>
+
+        <div class="subMenu d-none mt-2" id="teamA">
+          <h5>Player List</h5>
+          <table class="table table-responsive">
+            <thead>
+            <tr>
+              <th>Player Name</th>
+            </tr>
+            </thead>
+            <tbody id="subMenuList">
+            <tr>
+              <td colspan="8"><p th:text="${subMenuList}"></p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="form-group">
+          <th:block th:each="players:${playerList}">
+            <label class="checkbox-inline" th:text="${players.name}">
+              <input type="checkbox" class="form-check-input" value="">
+            </label>
+
+          </th:block>
+
+        </div>
+
+      </div>
+
+
+
+
+  <div class="col-md-6">
+    <h3>Team B</h3>
+
+
+    <div class="form-group">
+
+      <select id="team2" name="teams[]" class="form-select" aria-label="Default select example">
+        <th:block th:each="teams:${teamList}">
+          <option th:value="${teams.id}" th:text="${teams.name}"></option>
+
+        </th:block>
+      </select>
+    </div>
+    <div class="subMenu d-none mt-2" id="teamB">
+      <h5>Player List</h5>
+      <table class="table table-responsive">
+        <thead>
+        <tr>
+          <th>Player Name</th>
+        </tr>
+        </thead>
+        <tbody id="subMenuListB">
+        <tr>
+          <td colspan="8"><p th:text="${subMenuList}"></p></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 
 
@@ -114,6 +111,73 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script type="text/javascript">
+
+</script>
+
+<script th:inline="javascript">
+    console.log($('#team1'));
+
+    function setCltVal() {
+        var id = $("#team1 option:selected").val();
+      $("#subMenuList").empty();
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:9090/match-team-details/valueGet/" + id,
+          beforeSend: function (xhr) {
+            $("#teamA").addClass('d-none');
+          },
+          dataType: 'json',
+            success: function (data) {
+              $("#teamA").removeClass('d-none');
+                $.each(data, function (index, item) {
+                    $("#subMenuList").append('<tr style="cursor: pointer" id="tr1">' +
+                        '<td> <div class="checkbox-custom chekbox-primary input-group">' +
+                        '<input class="to-labelauty" type="checkbox" id="allowYN_' + item.id + '" name="players[]" value="' + item.id + '">' +
+                        '<label>&nbsp;&nbsp;' + item.name + '</label>' +
+                        '</div></td></tr>');
+                });
+            },
+            error: function (error) {
+
+            }
+        });
+    }
+
+    $("#team2").on("change", function () {
+      var id = $("#team2 option:selected").val();
+      $("#subMenuListB").empty();
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:9090/match-team-details/valueGet/" + id,
+        beforeSend: function (xhr) {
+          $("#teamB").addClass('d-none');
+        },
+        dataType: 'json',
+        success: function (data) {
+          $("#teamB").removeClass('d-none');
+          $.each(data, function (index, item) {
+            console.log(data)
+            $("#subMenuListB").append('<tr style="cursor: pointer" id="tr1">' +
+                    '<td> <div class="checkbox-custom chekbox-primary input-group">' +
+                    '<input class="to-labelauty" type="checkbox" id="allowYN_' + item.id + '" name="players[]" value="' + item.id + '">' +
+                    '<label>&nbsp;&nbsp;' + item.name + '</label>' +
+                    '</div></td></tr>');
+          });
+        },
+        error: function (error) {
+//name="subMenuList[' + index + ']"
+        }
+      })
+    })
+</script>
+
 
 </body>
 </html>
