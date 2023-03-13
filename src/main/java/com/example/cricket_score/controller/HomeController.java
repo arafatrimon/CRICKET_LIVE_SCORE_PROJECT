@@ -46,12 +46,22 @@ public class HomeController {
         return "user";
     }
 
-
-
-    @GetMapping("/toss-details")
-    public String tossDetails() {
-        return "toss_details";
+    @GetMapping("/opening-bat-ball")
+    public String openingBatBall() {
+        return "openingBatBall";
     }
+
+    @ModelAttribute("toss")
+    public Map<Integer, String> outType() {
+        Map<Integer, String> outType = new HashMap<>();
+        outType.put(0, "");
+        outType.put(1, "Bat");
+        outType.put(2, "Bowl");
+        return outType;
+    }
+
+
+
 
 
 

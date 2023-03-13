@@ -1,9 +1,6 @@
 package com.example.cricket_score.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -14,4 +11,7 @@ public class Team {
     private  long id;
     private String  name;
     private String owner;
+
+    @Column(columnDefinition = "varchar(255) default 'default'")
+    private String toss;
 }

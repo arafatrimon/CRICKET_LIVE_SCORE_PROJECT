@@ -18,4 +18,5 @@ public class MatchTeamDetails {
     private List<Team> teams;
     @ManyToMany
     private List<Player> players;
+
 }
