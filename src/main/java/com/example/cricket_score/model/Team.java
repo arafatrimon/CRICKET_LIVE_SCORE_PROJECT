@@ -8,10 +8,13 @@ import lombok.Data;
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long id;
-    private String  name;
+    private Long id;
+    private String name;
     private String owner;
-
     @Column(columnDefinition = "varchar(255) default 'default'")
-    private String toss;
+    private String role;
+    @Column(columnDefinition = "varchar(255) default 'default'")
+    private String innings;
+    @Transient
+    private Long matchId;
 }

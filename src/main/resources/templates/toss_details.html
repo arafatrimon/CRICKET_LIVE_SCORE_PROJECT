@@ -10,23 +10,48 @@
 
 <div th:insert="~{navbar}"></div>
 <div class="container">
-
+<div class="row match">
   <form>
-
-    <select class="form-select" aria-label="Default select example">
-      <option selected>Bat</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>
-
-    <div class="form-group">
-      <label for="exampleInputEmail1">Overs</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <div class="col-md-3 mt-3">
+      <input type="text" placeholder="Enter Match No." name="id" id="no" class="form-control">
+      <button type="button" class="btn btn-primary matchBtn mt-2">Submit</button>
     </div>
+  </form>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+</div>
+
+
+  <form class="form d-none" th:action="@{/team/update}" th:object="${team}" method="post">
+<div class="row">
+  <div class="col-md-4 mt-1">
+    <input type="hidden" name="matchId" id="matchId">
+    <label class="form-control-label">Select Team</label>
+    <select class="form-select team" name="id" id="mySelect">
+      <option selected>Please Select One</option>
+    </select>
+  </div>
+  <div class="col-md-4 mt-1">
+    <label class="form-control-label">Select Bat/Ball</label>
+    <select class="form-select" name="role">
+      <option selected>Please Select One</option>
+      <option value="Bat">Bat</option>
+      <option value="Ball">Ball</option>
+    </select>
+  </div>
+  <div class="col-md-4 mt-1">
+    <label class="form-control-label">Select Innings</label>
+    <select class="form-select" name="innings">
+      <option selected>Please Select One</option>
+      <option value="First Innings">First Innings</option>
+      <option value="Second Innings">Second Innings</option>
+    </select>
+  </div>
+</div>
+
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    <button type="button" class="btn btn-warning cancelBtn mt-3">Cancel</button>
   </form>
 </div>
 
@@ -37,6 +62,43 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+        integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  $(".matchBtn").on("click", function () {
+    var id = $("#no").val();
+    $("#mySelect").empty();
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:9090/match-team-details/matchValue/" + id,
+      beforeSend: function (xhr) {
+        $(".form").addClass("d-none");
+      },
+      dataType: 'json',
+      success: function (data) {
+        $(".form").removeClass("d-none");
+        $(".match").addClass("d-none");
+
+        $.each(data, function (index, item) {
+          $('#mySelect').append($('<option>', {
+            value: item[0],
+            text: item[1]
+          }));
+          $("#matchId").val(data[0][2])
+        });
+      },
+      error: function (error) {
+
+      }
+    });
+
+  });
+  $(".cancelBtn").on("click", function () {
+    $(".form").addClass("d-none");
+    $(".match").removeClass("d-none");
+  });
+</script>
 
 </body>
 </html>

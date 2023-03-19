@@ -46,16 +46,23 @@ public class MatchTeamDetailsController {
         //  redirectAttributes.addFlashAttribute("playerList,",players);
         return new ModelAndView("match-team-details");
     }
-@GetMapping("/valueGet/{id}")
-    ResponseEntity<?> getValue(@PathVariable Long id){
-    List<Player> players = playerService.findPlayerByTeam(id);
-    return ResponseEntity.ok(players);
-}
 
-@PostMapping("/save")
-    public String save(@ModelAttribute MatchTeamDetails matchTeamDetails){
+    @GetMapping("/valueGet/{id}")
+    ResponseEntity<?> getValue(@PathVariable Long id) {
+        List<Player> players = playerService.findPlayerByTeam(id);
+        return ResponseEntity.ok(players);
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute MatchTeamDetails matchTeamDetails) {
         matchTeamDetailsService.save(matchTeamDetails);
         return "redirect:";
-}
+    }
+
+    @GetMapping("/matchValue/{id}")
+    ResponseEntity<?> getValueById(@PathVariable Long id) {
+        List<?> team = matchTeamDetailsService.getValueById(id);
+        return ResponseEntity.ok().body(team);
+    }
 
 }
