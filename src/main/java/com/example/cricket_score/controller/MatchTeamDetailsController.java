@@ -61,7 +61,7 @@ public class MatchTeamDetailsController {
 
     @GetMapping("/matchValue/{id}")
     ResponseEntity<?> getValueById(@PathVariable Long id) {
-        List<?> team = matchTeamDetailsService.getValueById(id);
+        Object [][] team = matchTeamDetailsService.getValueById(id);
         return ResponseEntity.ok().body(team);
     }
 

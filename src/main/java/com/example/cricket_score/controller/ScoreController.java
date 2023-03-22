@@ -31,7 +31,7 @@ public class ScoreController {
     @GetMapping("/score-update")
     public String updateBallByBall(Model model) {
 //        List<?> bowlers=bowlerService.getAllBowler();
-
+        scoreService.initRuns();
         int run = scoreService.getRun();
         double over = scoreService.getOver();
 

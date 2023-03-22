@@ -3,12 +3,9 @@ package com.example.cricket_score.service;
 import com.example.cricket_score.model.Team;
 import com.example.cricket_score.repository.MatchTeamDetailsRepository;
 import com.example.cricket_score.repository.TeamRepository;
-import com.fasterxml.jackson.databind.JsonSerializable;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -22,39 +19,29 @@ public class TeamService {
         teamRepository.save(team);
     }
 
-    public void updateValue(Team team) throws NoSuchFieldException {
-        List<?> matchTeam = matchTeamDetailsRepository.getValue(team.getMatchId());
+    public void updateValue(Team team) {
+        Object[][] matchTeam = matchTeamDetailsRepository.getValue(team.getMatchId());
+        if (matchTeam[0][0] == team.getId()) {
+            teamRepository.updateValue(team.getRole(), team.getInnings(), team.getId());
 
-        for (int counter = 0; counter < matchTeam.size(); counter++) {
-            System.out.println(matchTeam.get(counter));
+            if (team.getRole() == "Bat") {
+                team.setRole("Ball");
+            }else {
+                team.setRole("Bat");
+            }
 
-            Object obj1 = matchTeam.get(counter);
-            
+            teamRepository.updateValue(team.getRole(), team.getInnings(), (Long) matchTeam[1][0]);
         }
+        if (matchTeam[1][0] == team.getId()) {
+            teamRepository.updateValue(team.getRole(), team.getInnings(), team.getId());
+            if (team.getRole() == "Bat") {
+                team.setRole("Ball");
+            }else {
+                team.setRole("Bat");
+            }
 
-//        for (Object obj : matchTeam) {
-//            obj.getClass().getDeclaredField("0");
-//            System.out.println(obj);
-//
-//            if (obj.equals(team.getId())) {
-//                 int val = teamRepository.updateValue(team.getRole(), team.getInnings(), team.getId());
-////                team.setRole("bowl");
-////                int val2 = teamRepository.updateValue(team.getRole(), team.getInnings(), team.getId());
-//            }else if (obj.equals(1)){
-//                team.setRole("bowl");
-//                int val2 = teamRepository.updateValue(team.getRole(), team.getInnings(), 1);
-//            }
-//
-//        }
-
-
-//        if (team.getId() != null) {
-//            int val = teamRepository.updateValue(team.getRole(), team.getInnings(), team.getId());
-//
-//        } else {
-//            System.out.println("Need team id");
-//        }
-
+            teamRepository.updateValue(team.getRole(), team.getInnings(), (Long) matchTeam[0][0]);
+        }
     }
 
     public List<Team> getAllTeams() {

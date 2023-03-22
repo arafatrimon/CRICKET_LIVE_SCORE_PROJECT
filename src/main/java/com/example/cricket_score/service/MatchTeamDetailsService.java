@@ -19,7 +19,7 @@ public class MatchTeamDetailsService {
         return matchTeamDetailsRepository.save(matchTeamDetails);
     }
 
-    public List<?> getValueById(@PathVariable Long id){
+    public Object[][] getValueById(@PathVariable Long id){
         return matchTeamDetailsRepository.getValue(id);
     }
 
